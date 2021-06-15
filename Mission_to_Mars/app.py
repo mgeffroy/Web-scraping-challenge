@@ -19,7 +19,7 @@ def home():
 def scrape():
     #Run scrape function 
     mars_data = mars_scrape.scrape_info()
-    mongo.db.collection.update({}, mars_data, upsert=True)
+    mars.update({}, mars_data, upsert=True)
     return redirect("/")
 
 
