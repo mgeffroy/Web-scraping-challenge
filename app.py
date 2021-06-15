@@ -1,14 +1,29 @@
 # import necessary libraries
-from flask import Flask, render_template
 
-# create instance of Flask app
+from flask import Flask, render_template, redirect
+from flask_pymongo import PyMongo
+from Mars_scrape import scrape_mars
+
 app = Flask(__name__)
 
+# Use flask_pymongo to set up mongo connection
+app.config["MONGO_URI"] = "mongodb://localhost:27017/phone_app"
+mongo = PyMongo(app)
 
-# create route that renders index.html template
+# Or set inline
+# mongo = PyMongo(app, uri="mongodb://localhost:27017/phone_app")
 @app.route("/")
-def echo():
-    return render_template("index.html", text="Serving up cool text from the Flask server!!")
+def index():
+    mars = mongo.db.collection.find_one()
+    return render_template("index.html", mars=mars)
+
+
+@app.route("/scrape")
+def scraper():
+    listings = mongo.db.listings
+    listings_data = scrape_mars.scrape()
+    listings.update({}, listings_data, upsert=True)
+    return redirect("/", code=302)
 
 
 if __name__ == "__main__":
