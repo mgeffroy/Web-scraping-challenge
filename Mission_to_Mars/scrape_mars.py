@@ -1,14 +1,12 @@
 #Import dependencies 
 from splinter import Browser
 from bs4 import BeautifulSoup as bs
-import time
 from webdriver_manager.chrome import ChromeDriverManager
-import pymongo
 import requests
 import pandas as pd
 
 
-def scrape():
+def scrape_info():
     # Set up Splinter
     executable_path = {'executable_path': ChromeDriverManager().install()}
     browser = Browser('chrome', **executable_path, headless=False)
@@ -18,10 +16,8 @@ def scrape():
    #Prepare everything for Mars News
     # Visit redplanetscience.com
     # URL of page to be scraped
-    url = 'https://redplanetscience.com/'
+    url = "https://redplanetscience.com/"
     browser.visit(url)
-
-    time.sleep(1)
 
     # Scrape page into Soup
     html = browser.html
@@ -102,10 +98,9 @@ def scrape():
 
     ################################
  
-    # Close the browser after scraping
-    browser.quit()
-
-    scrape_mars ={'news_title': news_title,
+  
+#Store everything in a dictionary 
+    mars_data ={'news_title': news_title,
                 'news_p': news_p,
                 'image_url': featured_image,
                 'html_table': html_table,
@@ -113,6 +108,9 @@ def scrape():
                 }
     
     print("Ready!")
+  
+  # Close the browser after scraping
+    browser.quit()
 
-    return scrape_mars
+    return mars_data
    
