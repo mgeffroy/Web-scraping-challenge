@@ -30,11 +30,28 @@
  <!--Create our columns inside our rows-->
      <div class = "col-sm-12 col-md-12">
        <h2>Latest Mars News</h2>
-      <p>{{mars.news_title}} </p>
+      <p style="font-size: large"><strong>{{mars.news_title}}</strong></p>
       <p>{{mars.news_p}} </p>
 
 </div>
-  
+</div>
+
+<div class = "row gx-5">
+<div class = "col-sm-8">
+  <h2>Featured Mars Image</h2>
+  <img src="{{mars.image_url}}" alt="featured mars image">
+</div>
+
+<div class = "col-sm-4">
+<h2>Mars Facts</h2>
+<table>
+  {% for info in table % }
+
+ { %end for%}
+</table>
+
+
+</div>
 
 </div>
 
