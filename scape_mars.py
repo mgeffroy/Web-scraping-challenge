@@ -53,7 +53,7 @@ def scrape():
 
     ##############################################
     #Mars characteritics table 
-    t_url = 'https://galaxyfacts-mars.com/'
+    t_url = "https://galaxyfacts-mars.com/"
     
     #Read the tables 
     tables = pd.read_html(t_url)
@@ -67,26 +67,52 @@ def scrape():
     html_table = mars_earth_table.to_html()
     html_table.replace('\n', '')
     
+    ###########################################################
+    
+    #Mars hemispheres
+    # URL of page to be scraped
+    url = "https://marshemispheres.com/"
+    browser.visit(url)
 
+    #Scrape page into soup 
+    html = browser.html
+    soup = bs(html, 'html.parser')
+    
+    #Create our empty list
+    hemispheres_image_url = []
 
-    # Get the max avg temp
-    max_temp = avg_temps.find_all('strong')[1].text
+    items = soup.find_all('div', class_='item')
+    
+    #Loop through selected items
+    for i in items:
+    
+        #Find "Hemisphere" title. Remember they are in h3 headers
+        title = i.h3.text
+    
+        #Go inside to gthe hemisphere page to get image URL:
+        link_url = i.find('a')['href']
+        full_url= url + link_url
+        browser.visit(full_url)
+        img_url = browser.find_by_text('Sample')['href']
+        #Save both the image url string for the full resolution hemisphere image, and the Hemisphere title containing the hemisphere name. Use a Python dictionary to store the data using the keys img_url and title.
+        hemispheres_dict = {'Title': title,
+                            'Image URL': img_url}
+            #Append the dictionary with the image url string and the hemisphere title to a list. This list will contain one dictionary for each hemisphere.
+        hemispheres_image_url.append(hemispheres_dict)
 
-    # BONUS: Find the src for the sloth image
-    relative_image_path = soup.find_all('img')[2]["src"]
-    sloth_img = url + relative_image_path
-
-
-
-    ##### Store data in a dictionary
-    costa_data = {
-        "sloth_img": sloth_img,
-        "min_temp": min_temp,
-        "max_temp": max_temp
-    }
-
+    ################################
+ 
     # Close the browser after scraping
     browser.quit()
 
-    # Return results
-    return costa_data
+    scrape_mars ={'news_title': news_title,
+                'news_p': news_p,
+                'image_url': featured_image,
+                'html_table': html_table,
+                'hemisphere_images': hemispheres_image_url
+                }
+    
+    print("Ready!")
+
+    return scrape_mars
+   
