@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup as bs
 from webdriver_manager.chrome import ChromeDriverManager
 import requests
 import pandas as pd
-
+import time 
 
 def scrape_info():
     # Set up Splinter
@@ -32,6 +32,8 @@ def scrape_info():
     news_title = title_results[0].text.strip()
     news_p= teaser_results[0].text.strip()
 
+    time.sleep(5)
+
     ###############################################
 
     #Featured Mars image
@@ -45,7 +47,9 @@ def scrape_info():
 
     #Get featured image
     image_path = soup.find_all('img', class_="headerimage fade-in")[0]["src"]
-    featured_image = url + image_path
+    featured_image = jpl_url + image_path
+
+    time.sleep(5)
 
     ##############################################
     #Mars characteritics table 
@@ -62,6 +66,8 @@ def scrape_info():
     mars_earth_table = me_df.iloc[1:5, :]
     html_table = mars_earth_table.to_html()
     html_table.replace('\n', '')
+
+    time.sleep(5)
     
     ###########################################################
     
@@ -92,11 +98,12 @@ def scrape_info():
         img_url = browser.find_by_text('Sample')['href']
         #Save both the image url string for the full resolution hemisphere image, and the Hemisphere title containing the hemisphere name. Use a Python dictionary to store the data using the keys img_url and title.
         hemispheres_dict = {'Title': title,
-                            'Image URL': img_url}
+                            'Image_URL': img_url}
             #Append the dictionary with the image url string and the hemisphere title to a list. This list will contain one dictionary for each hemisphere.
         hemispheres_image_url.append(hemispheres_dict)
 
     ################################
+
  
   
 #Store everything in a dictionary 
